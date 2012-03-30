@@ -35,27 +35,23 @@ Then use FileReader just like native FileReader!
 h3. Options
 
 h4. Init options required at first call
-* id : 'fileReaderSWFObject', // ID for the created swf object container,
-* filereader : 'files/filereader.swf', // The path to the filereader swf file
-* expressInstall : String, // The path to the express install swf file
-* debugMode : Boolean, // Turn on/off console logging
-* callback : Function, // Callback function triggered when Filereader is ready
+* *id* : 'fileReaderSWFObject',          // ID for the created swf object container,
+* *filereader* : 'files/filereader.swf', // The path to the filereader swf file
+* *expressInstall* : String,             // The path to the express install swf file
+* *debugMode* : Boolean,                 // Turn on/off console logging
+* *callback* : Function,                 // Callback function triggered when Filereader is ready
 
 h4. Element specific options can be used each time plugin function is called
-* multiple : Boolean, // Mutliple file select. Default: input file multiple property or false
-* accept : String, // Mime type file restriction. Default: input file accept attribute or false
-* label : String, // Label for the file type in file dialog if using extensions: example "Images (.jpg)"
-* extensions : String, // File extensions in Flash format: "*.jpg;*.png;*.pdf", requires label option
+* *multiple* : Boolean,                  // Mutliple file select. Default: input file multiple property or false
+* *accept* : String,                     // Mime type file restriction. Default: input file accept attribute or false
+* *label* : String,                      // Label for the file type in file dialog if using extensions: example "Images (.jpg)"
+* *extensions* : String,                 // File extensions in Flash format: "*.jpg;*.png;*.pdf", requires label option
 
 h3. Issues
 
 Flash Action Script is executed only afer scrolling window in Safari Windows.
 
 You can't use DOMElement.files to access file data, instead use event.target.files in change event callbacks.
-
-h3. Developers
-
-*Core Developer:* "Doug Neiner":http://dougneiner.com
 
 h3. License Information: MIT
 
