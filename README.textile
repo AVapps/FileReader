@@ -6,14 +6,6 @@ h3. Overview
 
 This library is a JavaScript + Flash library that allows you to read files client side using standart File API. It moves a transparent flash button over any DOM element and gives it a HTML 5 file input behavior.
 
-h3. Download
-
-Please download from the "Downloads":http://github.com/dcneiner/Downloadify/downloads section of this project.
-
-h3. Support
-
-For support, please use the "Issues":http://github.com/dcneiner/Downloadify/issues section of this project. You can also try to hit me up on "Twitter at @dougneiner":http://twitter.com/dougneiner but I might just ask you to file an issue. :)
-
 h3. Dependencies
 
 _The end user must have Flash 10 or higher installed for this plugin to work. As of September 2009, it was at a 93% saturation, so most users should already have it installed._
