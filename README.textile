@@ -19,7 +19,7 @@ h3. Usage
 
 First call plugin with init options and optionnaly element options:
 <pre>$("#element(s)").fileReader( options );</pre>
-Input type=file elements will use multiple and accept attributes unless these features are forced using the corresponding options or the extensions option.
+Input file elements will parse multiple and accept attributes unless these features are forced using the corresponding options or extensions option.
 
 Then define an event handler for the input change event and use event.target.files to get FileList:
 <pre>$("#element").on('change', function(evt) {
@@ -28,7 +28,7 @@ Then define an event handler for the input change event and use event.target.fil
   }
 });</pre>
 
-*_Important! You can't use DOMElement.files to get FileList! The solution used by the plugin is to make evt.target an object with only files attribute. Use _this_ to get DOMElement._*
+*Important! You can't use DOMElement.files to get FileList! The solution used by the plugin is to make evt.target an object with only a .files attribute. Use _this_ to get DOMElement.*
 
 Then use FileReader just like native FileReader!
 
@@ -50,8 +50,7 @@ h4. Element specific options can be used each time plugin function is called
 h3. Issues
 
 Flash Action Script is executed only afer scrolling window in Safari Windows.
-
-You can't use DOMElement.files to access file data, instead use event.target.files in change event callbacks.
+You can't use DOMElement.files to access FileList, instead use event.target.files in change event callbacks.
 
 h3. License Information: MIT
 
