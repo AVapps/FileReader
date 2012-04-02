@@ -45,7 +45,7 @@ h4. Element specific options can be used each time plugin function is called
 * *multiple* : Boolean,                  // Mutliple file select. Default: input file multiple property or false
 * *accept* : String,                     // Mime type file restriction. Default: input file accept attribute or false
 * *label* : String,                      // Label for the file type in file dialog if using extensions: example "Images (.jpg)"
-* *extensions* : String,                 // File extensions in Flash format: "*.jpg;*.png;*.pdf", requires label option
+* *extensions* : String,                 // File extensions in Flash format: "\*.jpg;\*.png;\*.pdf", requires label option
 
 h3. Issues
 
