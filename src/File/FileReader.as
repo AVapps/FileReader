@@ -30,7 +30,7 @@ package File
 			readyState = EMPTY;
 		}
 		
-		public function readAsDataUrl(file:FileReference):void
+		public function readAsDataURL(file:FileReference):void
 		{
 			readFormat = DATA;
 			_start(file);
