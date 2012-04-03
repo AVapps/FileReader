@@ -1,0 +1,61 @@
+h2. FileReader : FileAPI polyfill using Flash, jQuery and jQuery UI
+
+*_Important! The swf has been compiled for online use only. Testing from the file path (i.e. file:// ) will not work as it will violate the security sandbox._*
+
+h3. Overview
+
+This library is a JavaScript + Flash library that allows you to read files client side using standart File API. It moves a transparent flash button over any DOM element and gives it a HTML 5 file input behavior.
+
+h3. Dependencies
+
+_The end user must have Flash 10 or higher installed for this plugin to work. As of September 2009, it was at a 93% saturation, so most users should already have it installed._
+
+This plugin is dependent on :
+* SWFObject 2.0 (http://code.google.com/p/swfobject) for dynamic embedding
+* jQuery 1.7 for plugin structure and EventTarget interface implementation (http://www.w3.org/TR/DOM-Level-2-Events/events.html#Events-EventTarget) using jQuery.Callbacks
+* jQuery UI 1.8 for Flash object positionning using jQuery().position utility
+
+h3. Usage
+
+First call plugin with init options and optionnaly element options:
+<pre>$("#element(s)").fileReader( options );</pre>
+Input file elements will parse multiple and accept attributes unless these features are forced using the corresponding options or extensions option.
+
+Then define an event handler for the input change event and use event.target.files to get FileList:
+<pre>$("#element").on('change', function(evt) {
+  for (var i = 0; i < evt.target.files.length; i++) {
+    console.log(evt.target.files[i].name, evt.target.files[i].type, evt.target.files[i].size, evt.target.files[i].lastModifiedDate);
+  }
+});</pre>
+
+*Important! You can't use DOMElement.files to get FileList! The solution used by the plugin is to make evt.target an object with only a .files attribute. Use _this_ to get DOMElement.*
+
+Then use FileReader just like native FileReader!
+
+h3. Options
+
+h4. Init options required at first call
+* *id* : 'fileReaderSWFObject',          // ID for the created swf object container,
+* *filereader* : 'files/filereader.swf', // The path to the filereader swf file
+* *expressInstall* : String,             // The path to the express install swf file
+* *debugMode* : Boolean,                 // Turn on/off console logging
+* *callback* : Function,                 // Callback function triggered when Filereader is ready
+
+h4. Element specific options can be used each time plugin function is called
+* *multiple* : Boolean,                  // Mutliple file select. Default: input file multiple property or false
+* *accept* : String,                     // Mime type file restriction. Default: input file accept attribute or false
+* *label* : String,                      // Label for the file type in file dialog if using extensions: example "Images (.jpg)"
+* *extensions* : String,                 // File extensions in Flash format: =="*.jpg;*.png;*.pdf"==, requires label option
+
+h3. Issues
+
+Flash Action Script is executed only afer scrolling window in Safari Windows.
+You can't use DOMElement.files to access FileList, instead use event.target.files in change event callbacks.
+
+h3. License Information: MIT
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
