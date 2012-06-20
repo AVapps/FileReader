@@ -16,7 +16,7 @@
 			filereader      : 'files/filereader.swf', // The path to the filereader swf file
 			expressInstall  : null, // The path to the express install swf file
 			debugMode       : false,
-			callback        : false, // Callback function when Filereader is ready
+			callback        : false // Callback function when Filereader is ready
 		}, options);
 		
 		var self = this;
@@ -237,7 +237,7 @@
 		
 		// Registers FileReader instance for flash callbacks
 		_register: function(file) {
-			this._id = file.input + '.' + file.name
+			this._id = file.input + '.' + file.name;
 			FileAPIProxy.readers[this._id] = this;
 		},
 		_start: function(file) {
@@ -297,7 +297,7 @@
 		stopImmediatePropagation: function (){
 		},
 		preventDefault: function (){
-		},
+		}
 	};
 	
 	/**
