@@ -83,7 +83,7 @@
 				.wrap('<div>')
 				.parent()
 				.css({
-					// position:'absolute',
+					position:'fixed',
 					// top:'0px',
 					width:'1px',
 					height:'1px',
@@ -145,6 +145,7 @@
 			if (this.debugMode) console.log(error);
 		},
 		onSWFReady: function() {
+            this.container.css({position: 'absolute'});
 			if (this.ready) {
 				readyCallbacks.fire();
 			}
