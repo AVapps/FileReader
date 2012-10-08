@@ -108,7 +108,7 @@
 				if (self.ready) {
 					readyCallbacks.fire();
 				}
-				self.ready = e.success;
+				self.ready = e.success && typeof e.ref.add === "function";
 			});
 		},
 		swfObject: null,
