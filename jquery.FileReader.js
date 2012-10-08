@@ -149,7 +149,7 @@
 			if (this.ready) {
 				readyCallbacks.fire();
 			}
-			this.ready = typeof this.swfObject.add === "function";
+			this.ready = true;
 			return true;
 		}
 	};
