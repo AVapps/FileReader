@@ -145,11 +145,12 @@
 			if (this.debugMode) console.log(error);
 		},
 		onSWFReady: function() {
-            this.container.css({position: 'absolute'});
+                    this.container.css({position: 'absolute'});
+                    this.ready = typeof this.swfObject.add === "function";
 			if (this.ready) {
 				readyCallbacks.fire();
 			}
-			this.ready = true;
+			
 			return true;
 		}
 	};
