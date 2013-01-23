@@ -2,22 +2,18 @@
 	var readyCallbacks = $.Callbacks('once unique memory'),
 	inputsCount = 0,
 	currentTarget = null;
+
+	// if native FileReader support, then dont add the polyfill and make the plugin do nothing
+	if (window.FileReader) {
+		$.fn.fileReader = function () { return this; }
+		return ;
+	}
 	
 	/**
 	* JQuery Plugin
 	*/
 	$.fn.fileReader = function( options ) {  
-		options = $.extend({
-			id              : 'fileReaderSWFObject', // ID for the created swf object container,
-			multiple        : null,
-			accept          : null,
-			label           : null,
-			extensions      : null,
-			filereader      : 'files/filereader.swf', // The path to the filereader swf file
-			expressInstall  : null, // The path to the express install swf file
-			debugMode       : false,
-			callback        : false // Callback function when Filereader is ready
-		}, options);
+		options = $.extend($.fn.fileReader.defaults, options);
 		
 		var self = this;
 		readyCallbacks.add(function() {
@@ -29,6 +25,22 @@
 			FileAPIProxy.init(options);
 		}
 		return this;
+	};
+	
+	/**
+	* Default options
+	*  	allows user set default options
+	*/
+	$.fn.fileReader.defaults = {
+		id              : 'fileReaderSWFObject', // ID for the created swf object container,
+		multiple        : null,
+		accept          : null,
+		label           : null,
+		extensions      : null,
+		filereader      : 'files/filereader.swf', // The path to the filereader swf file
+		expressInstall  : null, // The path to the express install swf file
+		debugMode       : false,
+		callback        : false // Callback function when Filereader is ready
 	};
 	
 	/**
