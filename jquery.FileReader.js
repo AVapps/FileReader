@@ -57,7 +57,7 @@
 				inputsCount++;
 			}
 			options.multiple = !!(options.multiple === null ? input.attr('multiple') : options.multiple);
-			options.accept = options.accept === null ? input.attr('accept') : options.multiple;
+			options.accept = options.accept === null ? input.attr('accept') : options.accept;
 			
 			FileAPIProxy.inputs[id] = input;
 			FileAPIProxy.swfObject.add(id, options.multiple, options.accept, options.label, options.extensions);
