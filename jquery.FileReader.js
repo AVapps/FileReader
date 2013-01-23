@@ -59,7 +59,7 @@
 						FileAPIProxy.container
 							.height(input.outerHeight())
 							.width(input.outerWidth())
-							.position({of:input});
+							.css(input.offset());
 					}
 				})
 				.click(function(e) {
