@@ -8,25 +8,25 @@
 		$.fn.fileReader = function () { return this; };
 		return ;
 	}
-	
+
 	/**
 	* JQuery Plugin
 	*/
-	$.fn.fileReader = function( options ) {  
+	$.fn.fileReader = function( options ) {
 		options = $.extend($.fn.fileReader.defaults, options);
-		
+
 		var self = this;
 		readyCallbacks.add(function() {
 			return main(self, options);
 		});
 		if ($.isFunction(options.callback)) readyCallbacks.add(options.callback);
-		
+
 		if (!FileAPIProxy.ready) {
 			FileAPIProxy.init(options);
 		}
 		return this;
 	};
-	
+
 	/**
 	* Default options
 	*  	allows user set default options
@@ -42,7 +42,7 @@
 		debugMode       : false,
 		callback        : false // Callback function when Filereader is ready
 	};
-	
+
 	/**
 	* Plugin callback
 	*     adds an input to registry
@@ -59,19 +59,19 @@
 			}
 			options.multiple = !!(options.multiple === null ? input.attr('multiple') : options.multiple);
 			options.accept = options.accept === null ? input.attr('accept') : options.accept;
-			
+      options.overlayContainer = options.overlayContainer || function(container, trigger) {
+        container.height(trigger.outerHeight()).width(trigger.outerWidth()).css(trigger.offset()).show()
+      };
+
 			FileAPIProxy.inputs[id] = input;
 			FileAPIProxy.swfObject.add(id, options.multiple, options.accept, options.label, options.extensions);
-			
+
 			trigger.add(input).css('z-index', 0)
 				.mouseover(function (e) {
 					if (id !== currentTarget) {
 						currentTarget = id;
 						FileAPIProxy.swfObject.mouseover(id);
-						FileAPIProxy.container
-							.height(trigger.outerHeight())
-							.width(trigger.outerWidth())
-							.css(trigger.offset());
+            options.overlayContainer(FileAPIProxy.container, trigger);
 					}
 				});
 			trigger.add(input).click(function(e) {
@@ -82,7 +82,7 @@
 				});
 		});
 	};
-	
+
 	/**
 	* Flash FileReader Proxy
 	*/
@@ -108,7 +108,7 @@
 					if(currentTarget) $('#' + currentTarget).trigger(evt.type);
 				})
 				.appendTo('body');
-			
+
 			swfobject.embedSWF(o.filereader, o.id, '100%', '100%', '10', o.expressInstall, {debugMode: o.debugMode ? true : ''}, {'wmode':'transparent','allowScriptAccess':'sameDomain'}, {}, function(e) {
 				self.swfObject = e.ref;
 				$(self.swfObject)
@@ -162,12 +162,12 @@
 			if (this.ready) {
 				readyCallbacks.fire();
 			}
-			
+
 			return true;
 		}
 	};
-	
-	
+
+
 	/**
 	* Add FileReader to the window object
 	*/
@@ -191,7 +191,7 @@
 		this.onabort = null;
 		this.onerror = null;
 		this.onloadend = null;
-		
+
 		// Event Listeners handling using JQuery Callbacks
 		this._callbacks = {
 			loadstart : $.Callbacks( "unique" ),
@@ -201,11 +201,11 @@
 			load      : $.Callbacks( "unique" ),
 			loadend   : $.Callbacks( "unique" )
 		};
-		
+
 		// Custom properties
 		this._id = null;
 	};
-	
+
 	window.FileReader.prototype = {
 		// async read methods
 		readAsBinaryString: function (file) {
@@ -223,13 +223,13 @@
 		readAsArrayBuffer: function(file){
 			throw("Whoops FileReader.readAsArrayBuffer is unimplemented");
 		},
-		
+
 		abort: function () {
 			this.result = null;
 			if (this.readyState === this.EMPTY || this.readyState === this.DONE) return;
 			FileAPIProxy.swfObject.abort(this._id);
 		},
-		
+
 		// Event Target interface
 		addEventListener: function (type, listener) {
 			if (type in this._callbacks) this._callbacks[type].add(listener);
@@ -246,9 +246,9 @@
 			}
 			return true;
 		},
-		
+
 		// Custom private methods
-		
+
 		// Registers FileReader instance for flash callbacks
 		_register: function(file) {
 			this._id = file.input + '.' + file.name;
@@ -280,7 +280,7 @@
 			this.dispatchEvent(new FileReaderEvent(evt));
 		}
 	};
-	
+
 	/**
 	* FileReader ProgressEvent implenting Event interface
 	*/
@@ -294,12 +294,12 @@
 				type: null,
 				target: null,
 				currentTarget: null,
-			
+
 				eventPhase: 2,
 
 				bubbles: false,
 				cancelable: false,
-		 
+
 				defaultPrevented: false,
 
 				isTrusted: false,
@@ -313,7 +313,7 @@
 		preventDefault: function (){
 		}
 	};
-	
+
 	/**
 	* FileList interface (Object with item function)
 	*/
@@ -327,12 +327,12 @@
 			this.length = 0;
 		}
 	};
-	
+
 	FileList.prototype = {
 		item: function(index) {
 			if (index in this) return this[index];
 			return null;
 		}
 	};
-	
+
 })( jQuery );
