@@ -5,7 +5,7 @@
 
 	// if native FileReader support, then dont add the polyfill and make the plugin do nothing
 	if (window.FileReader) {
-		$.fn.fileReader = function () { return this; }
+		$.fn.fileReader = function () { return this; };
 		return ;
 	}
 	
@@ -50,6 +50,7 @@
 	var main = function(el, options) {
 		return el.each(function(i, input) {
 			input = $(input);
+			var trigger = $(options.trigger || input);
 			var id = input.attr('id');
 			if (!id) {
 				id = 'flashFileInput' + inputsCount;
@@ -62,19 +63,18 @@
 			FileAPIProxy.inputs[id] = input;
 			FileAPIProxy.swfObject.add(id, options.multiple, options.accept, options.label, options.extensions);
 			
-			input.css('z-index', 0)
+			trigger.add(input).css('z-index', 0)
 				.mouseover(function (e) {
 					if (id !== currentTarget) {
-						e = e || window.event;
 						currentTarget = id;
 						FileAPIProxy.swfObject.mouseover(id);
 						FileAPIProxy.container
-							.height(input.outerHeight())
-							.width(input.outerWidth())
-							.css(input.offset());
+							.height(trigger.outerHeight())
+							.width(trigger.outerWidth())
+							.css(trigger.offset());
 					}
-				})
-				.click(function(e) {
+				});
+			trigger.add(input).click(function(e) {
 					e.preventDefault();
 					e.stopPropagation();
 					e.stopImmediatePropagation();
