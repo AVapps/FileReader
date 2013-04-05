@@ -117,7 +117,7 @@ package File
 					}
 					break;
 				case BINARY:
-					_result = file.data.readMultiByte(file.data.length, 'ascii');
+					_result = file.data.readMultiByte(file.data.length, File.systemCharset);
 					break;
 			}
 			dispatchEvent(new ProgressEvent('load'));
