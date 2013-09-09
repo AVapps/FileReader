@@ -5,7 +5,7 @@
 
 	// if native FileReader support, then dont add the polyfill and make the plugin do nothing
 	if (window.FileReader) {
-		$.fn.fileReader = function () { return this; }
+		$.fn.fileReader = function() { return this; };
 		return ;
 	}
 	
@@ -13,7 +13,7 @@
 	* JQuery Plugin
 	*/
 	$.fn.fileReader = function( options ) {  
-		options = $.extend($.fn.fileReader.defaults, options);
+		options = $.extend({}, $.fn.fileReader.defaults, options);
 		
 		var self = this;
 		readyCallbacks.add(function() {
@@ -21,7 +21,7 @@
 		});
 		if ($.isFunction(options.callback)) readyCallbacks.add(options.callback);
 		
-		if (!FileAPIProxy.ready) {
+		if (!FileAPIProxy.ready && !FileAPIProxy.hasInitialized) {
 			FileAPIProxy.init(options);
 		}
 		return this;
@@ -40,7 +40,12 @@
 		filereader      : 'files/filereader.swf', // The path to the filereader swf file
 		expressInstall  : null, // The path to the express install swf file
 		debugMode       : false,
-		callback        : false // Callback function when Filereader is ready
+		callback        : false, // Callback function when Filereader is ready
+		position        : 'fixed',
+		appendTo        : 'body',
+		offsetCss       : function (trigger) {
+			return trigger.offset();
+		}
 	};
 	
 	/**
@@ -49,6 +54,7 @@
 	*/
 	var main = function(el, options) {
 		return el.each(function(i, input) {
+			var trigger = $(options.trigger || input);
 			input = $(input);
 			var id = input.attr('id');
 			if (!id) {
@@ -62,17 +68,19 @@
 			FileAPIProxy.inputs[id] = input;
 			FileAPIProxy.swfObject.add(id, options.multiple, options.accept, options.label, options.extensions);
 			
-			input.css('z-index', 0)
+			trigger.add(input)
+				.css('z-index', 0)
 				.mouseover(function (e) {
 					if (id !== currentTarget) {
 						e = e || window.event;
 						currentTarget = id;
 						FileAPIProxy.swfObject.mouseover(id);
-						FileAPIProxy.container
-							.height(input.outerHeight())
-							.width(input.outerWidth())
-							.css(input.offset());
 					}
+
+					FileAPIProxy.container
+						.height(trigger.outerHeight())
+						.width(trigger.outerWidth())
+						.css(options.offsetCss(trigger));
 				})
 				.click(function(e) {
 					e.preventDefault();
@@ -88,14 +96,16 @@
 	*/
 	window.FileAPIProxy = {
 		ready: false,
+		hasInitialized: false,
 		init: function(o) {
 			var self = this;
+			this.hasInitialized = true;
 			this.debugMode = o.debugMode;
 			this.container = $('<div>').attr('id', o.id)
 				.wrap('<div>')
 				.parent()
 				.css({
-					position:'fixed',
+					position: o.position,
 					// top:'0px',
 					width:'1px',
 					height:'1px',
@@ -107,7 +117,24 @@
 				.on('mouseover mouseout mousedown mouseup', function(evt) {
 					if(currentTarget) $('#' + currentTarget).trigger(evt.type);
 				})
-				.appendTo('body');
+				.appendTo(o.appendTo);
+
+			function swfLoadEvent(e, fn) {
+				var initialTimeout = setTimeout(function () {
+					//Ensure Flash Player's PercentLoaded method is available and returns a value
+					if ($.isFunction(e.ref.PercentLoaded)) {
+						//Set up a timer to periodically check value of PercentLoaded
+						var loadCheckInterval = setInterval(function () {
+							if (self.debugMode) console.info('SWF Load Percentage: ', e.ref.PercentLoaded());
+							//Once value == 100 (fully loaded) we can do whatever we want
+							if (e.ref.PercentLoaded() === 100) {
+								fn();
+								clearInterval(loadCheckInterval);
+							}
+						}, 500);
+					}
+				}, 200);
+			}
 			
 			swfobject.embedSWF(o.filereader, o.id, '100%', '100%', '10', o.expressInstall, {debugMode: o.debugMode ? true : ''}, {'wmode':'transparent','allowScriptAccess':'sameDomain'}, {}, function(e) {
 				self.swfObject = e.ref;
@@ -117,10 +144,17 @@
 						outline: 0
 					})
 					.attr('tabindex', 0);
-				if (self.ready) {
-					readyCallbacks.fire();
+
+				if (e.success) {
+					swfLoadEvent(e, function () {
+						if (self.ready) {
+							readyCallbacks.fire();
+						}
+						self.ready = $.isFunction(e.ref.add);
+					});
+				} else {
+					self.hasInitialized = false;
 				}
-				self.ready = e.success && typeof e.ref.add === "function";
 			});
 		},
 		swfObject: null,
@@ -156,9 +190,9 @@
 		onFileReaderError: function(error) {
 			if (this.debugMode) console.log(error);
 		},
-		onSWFReady: function() {
-                    this.container.css({position: 'absolute'});
-                    this.ready = typeof this.swfObject.add === "function";
+		onSWFReady: function () {
+			this.container.css({position: 'absolute'});
+			this.ready = $.isFunction(this.swfObject.add);
 			if (this.ready) {
 				readyCallbacks.fire();
 			}
