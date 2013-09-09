@@ -122,7 +122,7 @@
 			function swfLoadEvent(e, fn) {
 				var initialTimeout = setTimeout(function () {
 					//Ensure Flash Player's PercentLoaded method is available and returns a value
-					if ($.isFunction(e.ref.PercentLoaded)) {
+				    if (typeof e.ref.PercentLoaded !== 'undefined') {
 						//Set up a timer to periodically check value of PercentLoaded
 						var loadCheckInterval = setInterval(function () {
 							if (self.debugMode) console.info('SWF Load Percentage: ', e.ref.PercentLoaded());
