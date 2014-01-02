@@ -17,7 +17,7 @@ This plugin is dependent on :
 
 h3. Usage
 
-First call plugin with init options and optionnaly element options:
+First call plugin with init options and optionally element options:
 <pre>$("#element(s)").fileReader( options );</pre>
 Input file elements will parse multiple and accept attributes unless these features are forced using the corresponding options or extensions option.
 
