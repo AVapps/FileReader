@@ -1,3 +1,6 @@
+*This plugin is unmaintained and unsupported as File API is now widely supported (almost 80% global support - http://caniuse.com/fileapi)
+Please use https://github.com/moxiecode/moxie instead of this polyfill if needed.*
+
 h2. FileReader : FileAPI polyfill using Flash, jQuery and jQuery UI
 
 *_Important! The swf has been compiled for online use only. Testing from the file path (i.e. file:// ) will not work as it will violate the security sandbox._*
